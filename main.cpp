@@ -19,6 +19,7 @@ public:
 }; 
 class Game{
 public:
+	int gameAttempt;
 	Word word; 
 	vector<char> ans; 
 	vector<char> generatedWord;	
@@ -27,18 +28,25 @@ public:
 			cout << a << " " ; 
 		}
 		cout << "\n" ;
+		cout << "Atempts left: " << gameAttempt << endl; 
 	}
 	void initializeGame(){
 		ans.clear();
 		generatedWord =	word.generateWord();
 		ans.resize(generatedWord.size(), '_'); 
+		gameAttempt = 7 ;
 		displayGame();
 	}
 	void checkGame(bool &gameContinue){
 		if (ans == generatedWord){
 			gameContinue = false ;
 			cout << "Congratulations on guessing the word " << endl ;
+			return;
 		}	
+		if (gameAttempt <= 0 ) {
+			gameContinue = false; 
+			cout << "You lost " << endl;
+		}
 	}
 	void insertWord(){
 		char userInput ; 
@@ -54,7 +62,9 @@ public:
 		initializeGame(); 
 		bool gameContinue = true; 
 		while(gameContinue){
+			
 			insertWord(); 
+			gameAttempt -- ;
 			displayGame(); 
 			checkGame(gameContinue); 
 		}
