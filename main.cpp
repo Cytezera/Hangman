@@ -7,27 +7,66 @@ using namespace std;
 
 class Word{
 public: 
-	string wordGenerated; 
 	vector<string> words = {"hello","computer","table","chair","door","house","bank","cake"}; 
 
-	void generateWord(){
+	vector<char> generateWord(){
 		srand(time(0)); 
-		wordGenerated = words[rand() % words.size()]; 
-	       	cout << wordGenerated; 	
+		string wordGenerated = words[rand() % words.size()]; 
+		vector<char> charWord (wordGenerated.begin(),wordGenerated.end()); 
+		cout << wordGenerated; 
+		return charWord;		
 	}
 }; 
 class Game{
 public:
 	Word word; 
+	vector<char> ans; 
+	vector<char> generatedWord;	
+	void displayGame(){
+		for (char a : ans ) {
+			cout << a << " " ; 
+		}
+		cout << "\n" ;
+	}
+	void initializeGame(){
+		ans.clear();
+		generatedWord =	word.generateWord();
+		ans.resize(generatedWord.size(), '_'); 
+		displayGame();
+	}
+	void checkGame(bool &gameContinue){
+		if (ans == generatedWord){
+			gameContinue = false ;
+			cout << "Congratulations on guessing the word " << endl ;
+		}	
+	}
+	void insertWord(){
+		char userInput ; 
+		cout << "Please inset a word " << endl; 
+		cin >> userInput; 
+		for (int i = 0 ; i < ans.size(); i ++){
+			if (userInput == generatedWord[i]){
+				ans[i] = userInput;
+			}
+		}
+	}
 	void playGame(){
-		word.generateWord();
+		initializeGame(); 
+		bool gameContinue = true; 
+		while(gameContinue){
+			insertWord(); 
+			displayGame(); 
+			checkGame(gameContinue); 
+		}
 	}	
 };
 
 void gameMenu(){
 	int userInput;
 	Game game; 
+	Word word; 
 	while(true){
+		cin.clear();
 		cout << "What would you like to do? " << endl; 
 		cout << "1.Play hangman" << endl; 
 		cout << "2.Exit"<< endl; 
