@@ -1,3 +1,4 @@
+#include <unordered_set>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,6 +24,7 @@ public:
 	Word word; 
 	vector<char> ans; 
 	vector<char> generatedWord;	
+	unordered_set<char> wordSeen ;
 	void displayGame(){
 		for (char a : ans ) {
 			cout << a << " " ; 
@@ -32,6 +34,7 @@ public:
 	}
 	void initializeGame(){
 		ans.clear();
+		wordSeen.clear();
 		generatedWord =	word.generateWord();
 		ans.resize(generatedWord.size(), '_'); 
 		gameAttempt = 7 ;
@@ -48,15 +51,31 @@ public:
 			cout << "You lost " << endl;
 		}
 	}
-	void insertWord(){
-		char userInput ; 
-		cout << "Please inset a word " << endl; 
-		cin >> userInput; 
-		for (int i = 0 ; i < ans.size(); i ++){
-			if (userInput == generatedWord[i]){
-				ans[i] = userInput;
+	bool checkChar( char userInput){
+		if (wordSeen.count(userInput)) {
+			cout << "Already guessed the word" << endl; 
+			return false ;
+		}
+		wordSeen.insert(userInput);
+		return true; 	
+	}
+	void checkCharInWord(char userInput){
+		for (int i = 0 ; i < ans.size(); i++) {
+			if (userInput == generatedWord[i]{
+					ans[i] = userInput ; 
 			}
 		}
+	}
+	void insertWord(){
+		
+		bool wordAdded = false; 
+		do{
+			char userInput ; 
+			cout << "Please inset a word " << endl; 
+			cin >> userInput; 
+			wordAdded = checkChar(userInput); 
+		}while(!wordAdded); 
+		checkCharInWord(userInput);
 	}
 	void playGame(){
 		initializeGame(); 
